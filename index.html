@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#170D2B" />
+  <title>TooSquare — Geometry Challenge</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <section class="mode-screen" id="modeScreen" aria-labelledby="modeTitle">
+    <header class="mode-header">
+      <div class="mode-logo">TooSquare<span>™</span></div>
+    </header>
+
+    <div class="mode-content">
+
+      <div class="mode-cards">
+        <button class="mode-card" id="dailyStartBtn" type="button">
+          <span class="mode-icon">✦</span>
+          <span class="mode-tag">ONE ATTEMPT EACH DAY</span>
+          <strong>Daily Challenge</strong>
+          <span class="mode-description">Take on today's loop and record your score. A new challenge every day.</span>
+          <span class="mode-action">Play Daily Challenge <span>→</span></span>
+        </button>
+
+        <button class="mode-card" id="classicStartBtn" type="button">
+          <span class="mode-icon">∞</span>
+          <span class="mode-tag">UNLIMITED ROUNDS</span>
+          <strong>Classic Mode</strong>
+          <span class="mode-description">Practice at your own pace, generate new loops, and improve your square-making skills.</span>
+          <span class="mode-action">Play Classic Mode <span>→</span></span>
+        </button>
+      </div>
+    </div>
+
+    <footer class="mode-footer">TOOSQUARE</footer>
+  </section>
+
+  <main class="app-shell" id="gamePage" hidden>
+    <header class="topbar">
+      <a class="brand" href="#" id="backToModesBtn" aria-label="Back to mode selection">
+        <span class="brand-mark">◈</span> TOO<span>SQUARE</span>
+      </a>
+    </header>
+
+    <section class="hero">
+      
+      <h1>Can you find the <em>perfect square?</em></h1>
+      <p class="intro">Choose four points along the loop. Make the sides equal and the corners as close to 90° as you can.</p>
+    </section>
+
+    <section class="mode-section" aria-label="Choose game mode">
+      <button class="mode-card active" id="gameDailyModeBtn" type="button">
+        <span class="mode-icon">✦</span>
+        <span class="mode-content">
+          <strong>Daily Challenge</strong>
+          <small>One attempt per day</small>
+        </span>
+        <span class="mode-score" id="dailyCardScore">— / 100</span>
+      </button>
+
+      <button class="mode-card" id="gameClassicModeBtn" type="button">
+        <span class="mode-icon">∞</span>
+        <span class="mode-content">
+          <strong>Classic Mode</strong>
+          <small>Play freely · no daily high score</small>
+        </span>
+        <span class="mode-arrow">→</span>
+      </button>
+    </section>
+
+    <section class="game-layout">
+      <div class="game-card">
+        <div class="canvas-topline">
+          <div>
+            <div class="section-label" id="modeLabel">DAILY CHALLENGE</div>
+            <div class="canvas-hint" id="statusText">Select 4 points on the loop</div>
+          </div>
+          <button class="ghost-btn" id="newLoopBtn" type="button">↻ New loop</button>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="gameCanvas" aria-label="Game canvas. Click four points on the loop to create a square."></canvas>
+          <div class="canvas-tip" id="canvasTip">
+            <span class="tip-dot"></span> Click the loop to place point 1 of 4
+          </div>
+
+          <div class="daily-lock-overlay" id="dailyLockOverlay" hidden>
+            <div class="lock-symbol">✓</div>
+            <strong>Daily challenge complete</strong>
+           
+            <button class="primary-btn compact" id="switchClassicBtn" type="button">
+              Play Classic instead →
+            </button>
+          </div>
+        </div>
+
+        <div class="game-controls">
+          <button class="secondary-btn" id="undoBtn" type="button" disabled>Undo point</button>
+          <button class="secondary-btn" id="clearBtn" type="button">Clear points</button>
+          <button class="primary-btn" id="checkBtn" type="button" disabled>
+            Score my square <span>→</span>
+          </button>
+        </div>
+
+        <div class="result-panel" id="resultPanel" aria-live="polite" hidden>
+          <div class="result-score">
+            <span class="section-label">YOUR SCORE</span>
+            <strong id="scoreValue">—</strong>
+            <span>/ 100</span>
+          </div>
+          <div class="result-copy">
+            <strong id="resultTitle">Nice attempt!</strong>
+            <p id="resultDescription">Your result will appear here.</p>
+          </div>
+          <button class="primary-btn compact" id="tryAgainBtn" type="button">
+            Try again <span>↻</span>
+          </button>
+        </div>
+      </div>
+
+      <aside class="side-column">
+        <div class="info-card score-card">
+          <div class="card-heading">
+            <span class="icon-box">✳</span>
+            <div>
+              <div class="section-label" id="scoreCardLabel">DAILY SCORE</div>
+              <h2 id="scoreCardTitle">Today's attempt</h2>
+            </div>
+          </div>
+
+          <div class="big-score" id="bestScore">—<small> / 100</small></div>
+          <div class="score-track"><div class="score-fill" id="scoreFill"></div></div>
+          <div class="score-note" id="scoreNote">Your daily score will appear here after you submit.</div>
+          <div class="daily-status" id="dailyStatus">One scored attempt available today</div>
+        </div>
+
+        <div class="info-card rules-card">
+          <div class="section-label">HOW TO PLAY</div>
+          <ol class="rules">
+            <li>
+              <span>1</span>
+              <div>
+                <strong>Find four points</strong>
+                <p>Click four different spots on the loop.</p>
+              </div>
+            </li>
+            <li>
+              <span>2</span>
+              <div>
+                <strong>Close the shape</strong>
+                <p>The game connects your points in order.</p>
+              </div>
+            </li>
+            <li>
+              <span>3</span>
+              <div>
+                <strong>Earn your score</strong>
+                <p>Equal sides and right angles score best.</p>
+              </div>
+            </li>
+          </ol>
+          <div class="note">
+            <span>ⓘ</span> Daily Challenge allows one scored attempt each local calendar day. Classic Mode can be replayed freely.
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="app-footer">
+      <span>TOOSQUARE</span>
+      <span>Think inside the loop.</span>
+    </footer>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
