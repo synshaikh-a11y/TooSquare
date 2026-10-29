@@ -18,13 +18,11 @@
   box-sizing: border-box;
 }
 
-[hidden] 
-{
+[hidden] {
   display: none !important;
 }
 
-body 
-{
+body {
   margin: 0;
   min-height: 100vh;
   color: var(--text);
@@ -34,21 +32,18 @@ body
   font-family: 'Poppins', system-ui, sans-serif;
 }
 
-button 
-{
+button {
   font: inherit;
   cursor: pointer;
 }
 
-button:disabled 
-{
+button:disabled {
   cursor: not-allowed;
 }
 
 /* Mode selection screen */
 
-.mode-screen 
-{
+.mode-screen {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -57,8 +52,7 @@ button:disabled
     #17091D;
 }
 
-.mode-header 
-{
+.mode-header {
   height: 76px;
   display: flex;
   align-items: center;
@@ -66,23 +60,20 @@ button:disabled
   border-bottom: 1px solid #F2C45A26;
 }
 
-.mode-logo 
-{
+.mode-logo {
   color: #F2A900;
   font-size: 27px;
   font-weight: 600;
   letter-spacing: -1px;
 }
 
-.mode-logo span 
-{
+.mode-logo span {
   font-size: 11px;
   vertical-align: top;
   margin-left: 3px;
 }
 
-.mode-screen .mode-content 
-{
+.mode-screen .mode-content {
   flex: 1;
   width: min(1050px, 92%);
   margin: 0 auto;
@@ -95,43 +86,37 @@ button:disabled
 }
 
 .mode-eyebrow,
-.section-label 
-{
+.section-label {
   color: var(--gold);
   font: 10px 'DM Mono', monospace;
   letter-spacing: 3px;
 }
 
-.mode-eyebrow 
-{
+.mode-eyebrow {
   margin: 0 0 14px;
 }
 
-.mode-screen h1 
-{
+.mode-screen h1 {
   font-size: clamp(30px, 4vw, 46px);
   line-height: 1.2;
   margin: 0;
   font-weight: 800;
 }
 
-.mode-subtitle 
-{
+.mode-subtitle {
   color: var(--muted);
   margin: 16px 0 42px;
   font-size: 15px;
 }
 
-.mode-screen .mode-cards
- {
+.mode-screen .mode-cards {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 26px;
 }
 
-.mode-screen .mode-card 
-{
+.mode-screen .mode-card {
   min-height: 315px;
   padding: 30px;
   text-align: left;
@@ -144,29 +129,24 @@ button:disabled
   flex-direction: column;
   align-items: flex-start;
   gap: 13px;
-
-
   transition:
     transform 180ms ease,
     background 180ms ease,
     box-shadow 180ms ease;
 }
 
-.mode-screen .mode-card:hover 
-{
+.mode-screen .mode-card:hover {
   transform: translateY(-5px);
   background: #291333;
   box-shadow: 0 12px 36px #F2A90020;
 }
 
-.mode-screen .mode-card:focus-visible
- {
+.mode-screen .mode-card:focus-visible {
   outline: 3px solid white;
   outline-offset: 5px;
 }
 
-.mode-screen .mode-icon 
-{
+.mode-screen .mode-icon {
   width: 55px;
   height: 55px;
   flex: 0 0 55px;
@@ -672,26 +652,6 @@ button:disabled
 
 .result-score {
   min-width: 95px;
-}
-/*Timer (Only for daily challenge mode) */
-.daily-timer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-  padding: 12px 15px;
-  background: #F2C45A0D;
-  border: 1px solid #F2C45A40;
-  border-radius: 10px;
-  width: fit-content;
-}
-
-.daily-timer strong {
-  color: var(--gold);
-  font-family: 'DM Mono', monospace;
-  font-size: 20px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
 }
 
 .result-score strong {
