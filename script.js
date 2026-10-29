@@ -17,6 +17,11 @@
   const bestScore = document.getElementById('bestScore');
   const scoreFill = document.getElementById('scoreFill');
   const scoreNote = document.getElementById('scoreNote');
+  const dailyTimerSection =document.getElementById('dailyTimerSection');
+  const dailyTimerDisplay = document.getElementById('dailyTimer');
+  let dailyTimerStartedAt = null;
+  let dailyTimerInterval = null;
+  let dailyElapsedMs = 0;
 
   const dailyModeBtn = document.getElementById('gameDailyModeBtn');
   const classicModeBtn = document.getElementById('gameClassicModeBtn');
@@ -54,6 +59,67 @@
   function dailyStorageKey() {
     return DAILY_KEY_PREFIX + localDateKey();
   }
+  function formatTime(milliseconds) {
+  const totalTenths = Math.floor(milliseconds / 100);
+
+  const minutes = Math.floor(totalTenths / 600);
+  const seconds = Math.floor((totalTenths % 600) / 10);
+  const tenths = totalTenths % 10;
+
+  return (
+    String(minutes).padStart(2, '0') + ':' +
+    String(seconds).padStart(2, '0') + '.' +
+    tenths
+  );
+}
+
+function updateDailyTimer() {
+  if (mode !== 'daily') return;
+
+  const elapsed =
+    dailyElapsedMs + (
+      dailyTimerStartedAt === null
+        ? 0
+        : performance.now() - dailyTimerStartedAt
+    );
+
+  dailyTimerDisplay.textContent = formatTime(elapsed);
+}
+
+function startDailyTimer() {
+  if (mode !== 'daily' || dailyTimerStartedAt !== null) {
+    return;
+  }
+
+  dailyTimerStartedAt = performance.now();
+
+  dailyTimerInterval = setInterval(updateDailyTimer, 100);
+
+  updateDailyTimer();
+}
+
+function stopDailyTimer() {
+  if (dailyTimerStartedAt !== null) {
+    dailyElapsedMs += performance.now() - dailyTimerStartedAt;
+    dailyTimerStartedAt = null;
+  }
+
+  if (dailyTimerInterval !== null) {
+    clearInterval(dailyTimerInterval);
+    dailyTimerInterval = null;
+  }
+
+  updateDailyTimer();
+}
+
+function resetDailyTimer() {
+  stopDailyTimer();
+
+  dailyElapsedMs = 0;
+  dailyTimerStartedAt = null;
+
+  dailyTimerDisplay.textContent = '00:00.0';
+}
 
   function getDailyRecord() {
     try {
@@ -234,14 +300,16 @@
     }
 
     selected.push(point);
+    if (mode === 'daily' && selected.length === 1) 
+      {
+  startDailyTimer();
+}
 
-    statusText.textContent =
-      selected.length < 4
+    statusText.textContent = selected.length < 4
         ? `Point ${selected.length} placed — choose point ${selected.length + 1}`
         : 'Four points placed — score your square';
 
-    canvasTip.innerHTML =
-      selected.length < 4
+    canvasTip.innerHTML = selected.length < 4
         ? `<span class="tip-dot"></span> Click the loop to place point ${selected.length + 1} of 4`
         : '<span class="tip-dot"></span> Ready to score your shape';
 
@@ -251,7 +319,7 @@
 
   function updateControls() {
     const locked = mode === 'daily' && dailyComplete();
-
+//Buttons
     undoBtn.disabled =
       selected.length === 0 || !!result || locked;
 
@@ -277,31 +345,28 @@
     dailyModeBtn.classList.toggle('active', mode === 'daily');
     classicModeBtn.classList.toggle('active', mode === 'classic');
 
-    dailyCardScore.textContent =
-      record ? `${record.score} / 100` : '— / 100';
+    dailyCardScore.textContent = ecord ? `${record.score} / 100` : '— / 100';
 
-    modeLabel.textContent =
-      mode === 'daily' ? 'DAILY CHALLENGE' : 'CLASSIC MODE';
-
-    scoreCardLabel.textContent =
-      mode === 'daily' ? 'DAILY SCORE' : 'CLASSIC ROUND';
+    modeLabel.textContent =  mode === 'daily' ? 'DAILY CHALLENGE' : 'CLASSIC MODE';
+     
+    scoreCardLabel.textContent =  mode === 'daily' ? 'DAILY SCORE' : 'CLASSIC ROUND';
 
     scoreCardTitle.textContent =
       mode === 'daily' ? "Today's attempt" : 'Current round';
 
-    if (mode === 'daily' && record) {
-      bestScore.innerHTML =
-        `${record.score}<small> / 100</small>`;
+    if (mode === 'daily' && record) 
+      {
+      bestScore.innerHTML = `${record.score}<small> / 100</small>`;
 
       scoreFill.style.width = `${record.score}%`;
 
-      scoreNote.textContent =
-        'Completed today. Your score is saved until midnight.';
+      scoreNote.textContent = 'Completed today. Your score is saved until midnight.';
 
       dailyStatus.textContent =
         '✓ Daily attempt used · resets at 12:00 AM';
 
-      if (!result) {
+      if (!result) 
+        {
         scoreValue.textContent = record.score;
 
         resultTitle.textContent =
@@ -312,26 +377,26 @@
 
         resultPanel.hidden = false;
       }
-    } else if (mode === 'daily') {
+    } else if (mode === 'daily') 
+      {
       bestScore.innerHTML = '—<small> / 100</small>';
       scoreFill.style.width = '0%';
 
-      scoreNote.textContent =
-        'Your daily score will appear here after you submit.';
+      scoreNote.textContent = 'Your daily score will appear here after you submit.';
 
-      dailyStatus.textContent =
-        'One scored attempt available today';
+      dailyStatus.textContent =  'One scored attempt available today';
 
-      if (!result) {
+      if (!result)
+         {
         resultPanel.hidden = true;
       }
-    } else {
+    } else 
+      {
       bestScore.innerHTML = result
         ? `${result.total}<small> / 100</small>`
         : '—<small> / 100</small>';
 
-      scoreFill.style.width =
-        result ? `${result.total}%` : '0%';
+      scoreFill.style.width = result ? `${result.total}%` : '0%';
 
       scoreNote.textContent = result
         ? 'This is your current classic round score.'
@@ -458,6 +523,10 @@
     if (selected.length !== 4) return;
 
     result = scoreShape();
+    if (mode === 'daily') 
+      {
+  stopDailyTimer();
+    }
 
     scoreValue.textContent = result.total;
 
@@ -498,12 +567,13 @@
       '<span class="tip-dot"></span> Score recorded';
 
     if (mode === 'daily') {
-      saveDailyRecord({
-        date: localDateKey(),
-        score: result.total,
-        title: resultTitle.textContent,
-        description: resultDescription.textContent
-      });
+     saveDailyRecord({
+  date: localDateKey(),
+  score: result.total,
+  title: resultTitle.textContent,
+  description: resultDescription.textContent,
+  elapsedMs: dailyElapsedMs
+});
 
       dailyCardScore.textContent =
         `${result.total} / 100`;
@@ -693,7 +763,23 @@
     }
 
     selected = [];
-    result = null;
+result = null;
+
+resetDailyTimer();
+
+dailyTimerSection.hidden = mode !== 'daily';
+
+if (mode === 'daily')
+   {
+  const savedRecord = getDailyRecord();
+
+  if (savedRecord && Number.isFinite(savedRecord.elapsedMs)) 
+    {
+    dailyElapsedMs = savedRecord.elapsedMs;
+    dailyTimerDisplay.textContent =
+      formatTime(dailyElapsedMs);
+  }
+}
     resultPanel.hidden = true;
 
     statusText.textContent = 'Select 4 points on the loop';
@@ -706,7 +792,8 @@
   });
 
   // Mode selection and navigation.
-  function startGame(selectedMode) {
+  function startGame(selectedMode) 
+  {
     mode = selectedMode;
 
     modeScreen.hidden = true;
